@@ -1,10 +1,7 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import "styles/globals.css";
 
 export const metadata = {
-  title: "IAM SaSS",
+  title: "IAM SaSS - shadcn UI",
   description: "Next JS app",
 };
 
@@ -14,8 +11,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="h-full w-full">
+      <body className="h-full w-full">{children}</body>
     </html>
   );
 }
