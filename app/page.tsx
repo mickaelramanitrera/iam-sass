@@ -1,17 +1,9 @@
 "use client";
 
-import { useContext } from "react";
-import { redirect } from "next/navigation";
-import { UserContext } from "@/components/contexts/userContext";
+import { Authenticated } from "@/components/hoc/authenticated";
 import Image from "next/image";
 
-export default function Home() {
-  const { user } = useContext(UserContext);
-
-  if (!user?.connected) {
-    redirect("/login");
-  }
-
+const HomePage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -121,4 +113,6 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+
+export default Authenticated(HomePage);

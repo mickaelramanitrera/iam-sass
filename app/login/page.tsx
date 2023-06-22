@@ -4,6 +4,7 @@ import { useTransition, useContext } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { UserContext } from "@/components/contexts/userContext";
 import { Button } from "@/components/ui/button";
@@ -37,14 +38,14 @@ const loginFormSchema = z.object({
     .min(8, { message: "Password must be minimum 8 characters long" }),
 });
 
-const Page = () => {
-  const { user: userConnected, setUser } = useContext(UserContext);
+const LoginPage = () => {
+  const { setUser } = useContext(UserContext);
   const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "test@email.com",
+      password: "00000000",
     },
   });
 
@@ -80,15 +81,21 @@ const Page = () => {
       // when credentials are valid, set the user in global context
       // and redirect to main page
       setUser({ email: values.email, connected: true });
-      router.push("/");
+      router.push("/dashboard");
     });
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="w-[100px] h-[100px] rounded-full border border-black flex justify-center items-center m-auto mb-8">
-          <Icons.key />
+        <div className="w-[100px] h-[100px] flex justify-center items-center m-auto mb-8">
+          <Image
+            src="/logo.png"
+            alt="sass_logo"
+            width={100}
+            height={100}
+            priority
+          />
         </div>
 
         <Card className="w-[350px]">
@@ -141,4 +148,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default LoginPage;

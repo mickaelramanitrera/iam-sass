@@ -18,8 +18,8 @@ export const validateCredentials = async ({
     { email: "test@email.com", password: "00000000" },
   ];
 
-  // My server is on very slow connection
-  await sleep(4000);
+  // Simulate latency to see visual FX
+  await sleep(1000);
 
   return allowedCredentials.some(
     ({ email: mail, password: pwd }) => mail === email && pwd === password

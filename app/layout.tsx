@@ -1,4 +1,3 @@
-import { ToastProvider } from "@/components/ui/toast";
 import { Toaster } from "@/components/ui/toaster";
 import GlobalProvider from "@/components/contexts";
 import "styles/globals.css";
