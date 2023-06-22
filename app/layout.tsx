@@ -1,3 +1,6 @@
+import { ToastProvider } from "@/components/ui/toast";
+import { Toaster } from "@/components/ui/toaster";
+import GlobalProvider from "@/components/contexts";
 import "styles/globals.css";
 
 export const metadata = {
@@ -12,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full w-full">
-      <body className="h-full w-full">{children}</body>
+      <body className="h-full w-full">
+        <GlobalProvider>
+          {children}
+          <Toaster />
+        </GlobalProvider>
+      </body>
     </html>
   );
 }

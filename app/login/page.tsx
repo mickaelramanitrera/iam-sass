@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useTransition } from "react";
+import { useTransition, useContext } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { UserContext } from "@/components/contexts/userContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Icons } from "@/components/icons";
+import { useToast } from "@/components/ui/use-toast";
 import "./styles.css";
 
 import { validateCredentials } from "./action";
@@ -35,6 +38,8 @@ const loginFormSchema = z.object({
 });
 
 const Page = () => {
+  const { user: userConnected, setUser } = useContext(UserContext);
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -44,12 +49,38 @@ const Page = () => {
   });
 
   const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
+
+  const toastLoginResults = (loginSuccess: boolean) => {
+    const toastValues = {
+      title: loginSuccess ? "Login succeeded" : "Login failed",
+      // @TODO more fine grained error after login failure
+      description: loginSuccess ? "" : "There was an error on login",
+      variant: !loginSuccess ? ("destructive" as const) : ("default" as const),
+    };
+
+    toast(toastValues);
+  };
 
   const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
-    // ✅ This will be type-safe and automatically validated.
+    // ✅ Values will be type-safe and automatically validated.
     startTransition(async () => {
       const isValidCredentials = await validateCredentials(values);
-      console.log("Credentials are valid", isValidCredentials);
+
+      // show a visual sign of what happened with login (failed or not)
+      toastLoginResults(isValidCredentials);
+
+      // set global user contect to "not connected user"
+      // to cleanup the state that might have been there
+      if (!isValidCredentials) {
+        setUser({ email: undefined, connected: false });
+        return;
+      }
+
+      // when credentials are valid, set the user in global context
+      // and redirect to main page
+      setUser({ email: values.email, connected: true });
+      router.push("/");
     });
   };
 
@@ -76,7 +107,7 @@ const Page = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="m@example.com" {...field} />
+                      <Input placeholder="mickael@example.com" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
