@@ -1,9 +1,12 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useContext, useTransition } from "react";
 import { Authenticated } from "@/components/hoc/authenticated";
 import { Header } from "@/app/dashboard/header";
 import { Aside } from "@/app/dashboard/aside";
+import { handleLogout } from "@/app/dashboard/actions";
+import { UserContext } from "@/components/contexts/userContext";
+import { useToast } from "@/components/ui/use-toast";
 
 type props = {
   header?: ReactNode;
@@ -25,10 +28,32 @@ const DashboardLayout: React.FC<React.PropsWithChildren<props>> = ({
   </div>
 );
 
-const DashboardPage = () => (
-  <DashboardLayout header={<Header />} aside={<Aside />}>
-    My Dashboard
-  </DashboardLayout>
-);
+const DashboardPage = () => {
+  const [isLogoutPending, startTransition] = useTransition();
+  const { toast } = useToast();
+  const { setUser } = useContext(UserContext);
+
+  const onLogout = () => {
+    startTransition(async () => {
+      const logoutSucceeded = await handleLogout();
+      if (!logoutSucceeded) {
+        toast({ title: "Logout failed", variant: "destructive" as const });
+        return;
+      }
+
+      setUser({ email: undefined, connected: false });
+      toast({ title: "Logout succeeded" });
+    });
+  };
+
+  return (
+    <DashboardLayout
+      header={<Header onLogout={onLogout} logoutPending={isLogoutPending} />}
+      aside={<Aside />}
+    >
+      My Dashboard
+    </DashboardLayout>
+  );
+};
 
 export default Authenticated(DashboardPage);

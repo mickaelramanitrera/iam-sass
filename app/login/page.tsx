@@ -25,11 +25,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import "./styles.css";
 
-import { validateCredentials } from "./action";
+import { handleLogin } from "./action";
 
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Please input a valid email" }).trim(),
@@ -66,14 +65,14 @@ const LoginPage = () => {
   const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
     // ✅ Values will be type-safe and automatically validated.
     startTransition(async () => {
-      const isValidCredentials = await validateCredentials(values);
+      const loginSucceeded = await handleLogin(values);
 
       // show a visual sign of what happened with login (failed or not)
-      toastLoginResults(isValidCredentials);
+      toastLoginResults(loginSucceeded);
 
       // set global user contect to "not connected user"
       // to cleanup the state that might have been there
-      if (!isValidCredentials) {
+      if (!loginSucceeded) {
         setUser({ email: undefined, connected: false });
         return;
       }
