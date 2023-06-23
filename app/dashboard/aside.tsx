@@ -10,14 +10,14 @@ type Menu = {
 };
 
 const menus: Menu[] = [
-  { title: "dashboard", href: "/dashboard", icon: "post" },
+  { title: "Home", href: "/dashboard", icon: "home" },
   {
-    title: "organizations",
+    title: "Organizations",
     href: "/organizations",
-    icon: "add",
+    icon: "building",
   },
-  { title: "users", href: "/users", icon: "user" },
-  { title: "settings", href: "/settings", icon: "settings" },
+  { title: "Users", href: "/users", icon: "users" },
+  { title: "Settings", href: "/settings", icon: "settings" },
 ];
 
 export const Aside = () => {

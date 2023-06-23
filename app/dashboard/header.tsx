@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -9,6 +9,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Icons } from "@/components/icons";
+import { ProviderDropdown } from "@/components/providerDropdown";
+import { ProviderContext } from "@/components/contexts/providerContexts";
+import { useToast } from "@/components/ui/use-toast";
 
 type ThemeSwitchDropDownProps = {
   setTheme: (theme: string) => void;
@@ -35,10 +38,28 @@ const ThemeSwitchDropdown: FC<ThemeSwitchDropDownProps> = ({ setTheme }) => (
   </DropdownMenu>
 );
 
+const providers = [
+  {
+    name: "Keycloak Staging",
+    id: 1,
+  },
+  { name: "Keycloak Production", id: 2 },
+  { name: "Keycloak Local", id: 3 },
+];
+
 type Props = { onLogout: () => void; logoutPending?: boolean };
 
 export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
   const { setTheme } = useTheme();
+  const { currentProvider = 1, setProvider } = useContext(ProviderContext);
+  const { toast } = useToast();
+
+  const handleChangeProvider = (id: number) => {
+    if (currentProvider !== id) {
+      setProvider(id);
+      toast({ title: "New provider selected !" });
+    }
+  };
 
   return (
     <header className="border-y border-slate-300 fixed w-full h-[100px] backdrop-blur">
@@ -47,6 +68,11 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
           <Image src="/logo.png" alt="sass_logo" fill priority />
         </div>
         <div className="flex gap-x-2">
+          <ProviderDropdown
+            providers={providers}
+            selectedProviderId={currentProvider}
+            onChange={handleChangeProvider}
+          />
           <ThemeSwitchDropdown setTheme={setTheme} />
           <Button variant="ghost" onClick={onLogout} disabled={logoutPending}>
             {logoutPending ? "Logging out..." : "Logout"}

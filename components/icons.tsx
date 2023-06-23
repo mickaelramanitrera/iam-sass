@@ -1,7 +1,10 @@
 import {
   AlertTriangle,
+  ArrowDown,
   ArrowRight,
+  Building2,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
@@ -10,6 +13,7 @@ import {
   File,
   FileText,
   HelpCircle,
+  Home,
   Image,
   Key,
   Laptop,
@@ -24,6 +28,7 @@ import {
   Trash,
   Twitter,
   User,
+  Users,
   X,
   type Icon as LucideIcon,
 } from "lucide-react";
@@ -44,8 +49,10 @@ export const Icons = {
       <circle cx="12" cy="12" r="10"></circle>
     </svg>
   ),
+  building: Building2,
   close: X,
   spinner: Loader2,
+  chevronDown: ChevronDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,
@@ -58,6 +65,8 @@ export const Icons = {
   add: Plus,
   warning: AlertTriangle,
   user: User,
+  users: Users,
+  arrowDown: ArrowDown,
   arrowRight: ArrowRight,
   help: HelpCircle,
   pizza: Pizza,
@@ -68,6 +77,7 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  home: Home,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
