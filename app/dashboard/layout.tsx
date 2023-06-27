@@ -34,7 +34,7 @@ const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
       <div className="container grid grid-cols-[minmax(260px,_1fr)_3fr]">
         <Aside className="hidden md:block" />
         <main>
-          <MobileMenu className="block md:hidden mb-8" />
+          <MobileMenu className="block md:hidden mb-8" onLogout={onLogout} />
           {children}
         </main>
       </div>

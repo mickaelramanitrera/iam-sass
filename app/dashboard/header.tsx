@@ -87,7 +87,12 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
             onCreateProvider={handleCreateProvider}
           />
           <ThemeSwitchDropdown setTheme={setTheme} />
-          <Button variant="ghost" onClick={onLogout} disabled={logoutPending}>
+          <Button
+            className="hidden md:block"
+            variant="ghost"
+            onClick={onLogout}
+            disabled={logoutPending}
+          >
             {logoutPending ? "Logging out..." : "Logout"}
           </Button>
         </div>

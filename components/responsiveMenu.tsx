@@ -9,8 +9,6 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -59,7 +57,12 @@ export const DesktopMenu: FC<{}> = () => {
   );
 };
 
-export const MobileMenu: FC<{ className?: string }> = ({ className }) => {
+type mobileMenuProps = {
+  className?: string;
+  onLogout: () => void;
+};
+
+export const MobileMenu: FC<mobileMenuProps> = ({ className, onLogout }) => {
   const path = usePathname();
 
   return (
@@ -85,6 +88,9 @@ export const MobileMenu: FC<{ className?: string }> = ({ className }) => {
                 </Link>
               </DropdownMenuItem>
             ))}
+            <DropdownMenuItem key={menus.length} onSelect={onLogout}>
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
