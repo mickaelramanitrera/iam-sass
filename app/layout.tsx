@@ -3,8 +3,8 @@ import GlobalProvider from "@/components/contexts";
 import "styles/globals.css";
 
 export const metadata = {
-  title: "IAM SaSS - shadcn UI",
-  description: "Next JS app",
+  title: "Keycloak Kid",
+  description: "Simple Keycloak UI for SaSS applications",
 };
 
 export default function RootLayout({

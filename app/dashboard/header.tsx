@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -12,6 +12,7 @@ import { Icons } from "@/components/icons";
 import { ProviderDropdown } from "@/components/providerDropdown";
 import { ProviderContext } from "@/components/contexts/providerContexts";
 import { useToast } from "@/components/ui/use-toast";
+import type { providerFormValuesType } from "../formSchemas/providers";
 
 type ThemeSwitchDropDownProps = {
   setTheme: (theme: string) => void;
@@ -38,27 +39,36 @@ const ThemeSwitchDropdown: FC<ThemeSwitchDropDownProps> = ({ setTheme }) => (
   </DropdownMenu>
 );
 
-const providers = [
-  {
-    name: "Keycloak Staging",
-    id: 1,
-  },
-  { name: "Keycloak Production", id: 2 },
-  { name: "Keycloak Local", id: 3 },
-];
+type Provider = { name: string; id: number };
 
 type Props = { onLogout: () => void; logoutPending?: boolean };
 
 export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
   const { setTheme } = useTheme();
+  const [providers, setProviders] = useState<Provider[]>([
+    {
+      name: "Keycloak Staging",
+      id: 1,
+    },
+    { name: "Keycloak Production", id: 2 },
+    { name: "Keycloak Local", id: 3 },
+  ]);
   const { currentProvider = 1, setProvider } = useContext(ProviderContext);
   const { toast } = useToast();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const handleChangeProvider = (id: number) => {
     if (currentProvider !== id) {
       setProvider(id);
       toast({ title: "New provider selected !" });
     }
+  };
+
+  const handleCreateProvider = (value: providerFormValuesType) => {
+    setModalOpen(false);
+    const newProviderId = providers.length + 1;
+    setProviders([...providers, { name: value.name, id: newProviderId }]);
+    handleChangeProvider(newProviderId);
   };
 
   return (
@@ -72,6 +82,9 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
             providers={providers}
             selectedProviderId={currentProvider}
             onChange={handleChangeProvider}
+            modalOpen={modalOpen}
+            setModalOpen={setModalOpen}
+            onCreateProvider={handleCreateProvider}
           />
           <ThemeSwitchDropdown setTheme={setTheme} />
           <Button variant="ghost" onClick={onLogout} disabled={logoutPending}>
