@@ -7,6 +7,7 @@ import { Aside } from "@/app/dashboard/aside";
 import { handleLogout } from "@/app/dashboard/actions";
 import { UserContext } from "@/components/contexts/userContext";
 import { useToast } from "@/components/ui/use-toast";
+import { MobileMenu } from "@/components/responsiveMenu";
 
 const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [isLogoutPending, startTransition] = useTransition();
@@ -31,8 +32,11 @@ const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
       <div className="w-full"></div>
       <Header onLogout={onLogout} logoutPending={isLogoutPending} />
       <div className="container grid grid-cols-[minmax(260px,_1fr)_3fr]">
-        <Aside />
-        <main>{children}</main>
+        <Aside className="hidden md:block" />
+        <main>
+          <MobileMenu className="block md:hidden mb-8" />
+          {children}
+        </main>
       </div>
     </div>
   );

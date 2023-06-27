@@ -19,6 +19,7 @@ import {
   Laptop,
   Loader2,
   LucideProps,
+  Menu,
   Moon,
   MoreVertical,
   Pizza,
@@ -49,6 +50,7 @@ export const Icons = {
       <circle cx="12" cy="12" r="10"></circle>
     </svg>
   ),
+  menu: Menu,
   building: Building2,
   close: X,
   spinner: Loader2,
