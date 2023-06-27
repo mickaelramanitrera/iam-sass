@@ -13,11 +13,11 @@ const menus: Menu[] = [
   { title: "Home", href: "/dashboard", icon: "home" },
   {
     title: "Organizations",
-    href: "/organizations",
+    href: "/dashboard/organizations",
     icon: "building",
   },
-  { title: "Users", href: "/users", icon: "users" },
-  { title: "Settings", href: "/settings", icon: "settings" },
+  { title: "Users", href: "/dashboard/users", icon: "users" },
+  { title: "Settings", href: "/dashboard/settings", icon: "settings" },
 ];
 
 export const Aside = () => {
