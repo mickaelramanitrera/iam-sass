@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useTransition, FC, PropsWithChildren } from "react";
-import { Authenticated } from "@/components/hoc/authenticated";
+import { authenticated } from "@/components/hoc/authenticated";
 import { Header } from "@/app/dashboard/header";
 import { Aside } from "@/app/dashboard/aside";
 import { handleLogout } from "@/app/dashboard/actions";
@@ -38,4 +38,4 @@ const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
   );
 };
 
-export default Authenticated(DashboardLayout);
+export default authenticated(DashboardLayout);
