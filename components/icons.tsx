@@ -2,6 +2,7 @@ import {
   AlertTriangle,
   ArrowDown,
   ArrowRight,
+  Boxes,
   Building2,
   Check,
   ChevronDown,
@@ -24,6 +25,8 @@ import {
   MoreVertical,
   Pizza,
   Plus,
+  PlugZap,
+  RadioTower,
   Settings,
   SunMedium,
   Trash,
@@ -51,6 +54,7 @@ export const Icons = {
     </svg>
   ),
   menu: Menu,
+  radioTower: RadioTower,
   building: Building2,
   close: X,
   spinner: Loader2,
@@ -62,6 +66,7 @@ export const Icons = {
   page: File,
   media: Image,
   settings: Settings,
+  boxes: Boxes,
   billing: CreditCard,
   ellipsis: MoreVertical,
   add: Plus,
@@ -80,6 +85,7 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   home: Home,
+  plug: PlugZap,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
@@ -171,4 +177,4 @@ export const Icons = {
     </svg>
   ),
   key: Key,
-};
+} as const;

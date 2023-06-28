@@ -31,7 +31,7 @@ const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
     <div className="h-screen v-full grid grid-rows-[100px_auto] gap-y-16">
       <div className="w-full"></div>
       <Header onLogout={onLogout} logoutPending={isLogoutPending} />
-      <div className="container grid grid-cols-[minmax(260px,_1fr)_3fr]">
+      <div className="container grid md:grid-cols-[minmax(260px,_1fr)_3fr]">
         <Aside className="hidden md:block" />
         <main>
           <MobileMenu className="block md:hidden mb-8" onLogout={onLogout} />
