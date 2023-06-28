@@ -75,7 +75,13 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
     <header className="border-y border-slate-300 fixed w-full h-[100px] backdrop-blur">
       <div className="container flex h-full items-center justify-between">
         <div className="w-[50px] h-[50px] relative">
-          <Image src="/logo.png" alt="sass_logo" fill priority />
+          <Image
+            src="/logo.png"
+            alt="sass_logo"
+            fill
+            priority
+            className="dark:grayscale"
+          />
         </div>
         <div className="flex gap-x-2">
           <ProviderDropdown

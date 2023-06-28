@@ -89,6 +89,7 @@ const LoginPage = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="w-[100px] h-[100px] flex justify-center items-center m-auto mb-8">
           <Image
+            className="dark:grayscale"
             src="/logo.png"
             alt="sass_logo"
             width={100}

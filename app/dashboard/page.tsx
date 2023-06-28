@@ -11,28 +11,79 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { Container } from "@/components/container";
 import Link from "next/link";
+import { sleep } from "@/lib/time";
+
+export const revalidate = 0; // opt out of caching for this page
+
+const getData = async () => {
+  console.log("in get data");
+  await sleep(4000);
+  const orgNumber = Math.floor(Math.random() * 30) + 1;
+
+  return [
+    {
+      title: "Organizations",
+      content: orgNumber.toString(),
+      icon: "building",
+      subContent: "+25.9% from last month",
+      link: "/dashboard/organizations",
+    },
+    {
+      title: "Users",
+      content: "+2350",
+      icon: "users",
+      subContent: "+180.2% from last month",
+      link: "/dashboard/users",
+    },
+    {
+      title: "Active connections",
+      content: "8 756",
+      icon: "plug",
+      subContent: "+1780.2% from last month",
+      link: "/dashboard/settings",
+    },
+    {
+      title: "Average service speed",
+      content: "12 cnx/s",
+      icon: "radioTower",
+      subContent: "12 seconds since last issue",
+      link: undefined,
+    },
+    {
+      title: "Total resources",
+      content: "8 357 564",
+      icon: "boxes",
+      subContent: "+5700% from last month",
+      link: undefined,
+    },
+  ] as const;
+};
 
 export const metadata: Metadata = {
   title: "Keycloak Kid - Dashboard",
   description: "Main dashboard",
 };
 
-const DashboardPage = () => (
-  <Container title="Dashboard">
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {CARD_DATAS.map((data, index) => (
-        <CardInfo
-          title={data.title}
-          icon={data.icon}
-          content={data.content}
-          subContent={data.subContent}
-          link={data.link}
-          key={index}
-        />
-      ))}
-    </div>
-  </Container>
-);
+const DashboardPage = async () => {
+  const datas = await getData();
+
+  return (
+    <Container title="Dashboard">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {datas.map((data, index) => (
+          <CardInfo
+            title={data.title}
+            icon={data.icon}
+            content={data.content}
+            subContent={data.subContent}
+            link={data.link}
+            key={index}
+          />
+        ))}
+      </div>
+    </Container>
+  );
+};
 
 type cardInfoProps = {
   title: string;
@@ -74,43 +125,5 @@ const CardInfo: FC<cardInfoProps> = ({
     </Card>
   );
 };
-
-const CARD_DATAS = [
-  {
-    title: "Organizations",
-    content: "18",
-    icon: "building",
-    subContent: "+25.9% from last month",
-    link: "/dashboard/organizations",
-  },
-  {
-    title: "Users",
-    content: "+2350",
-    icon: "users",
-    subContent: "+180.2% from last month",
-    link: "/dashboard/users",
-  },
-  {
-    title: "Active connections",
-    content: "8 756",
-    icon: "plug",
-    subContent: "+1780.2% from last month",
-    link: "/dashboard/settings",
-  },
-  {
-    title: "Average service speed",
-    content: "12 cnx/s",
-    icon: "radioTower",
-    subContent: "12 seconds since last issue",
-    link: undefined,
-  },
-  {
-    title: "Total resources",
-    content: "8 357 564",
-    icon: "boxes",
-    subContent: "+5700% from last month",
-    link: undefined,
-  },
-] as const;
 
 export default DashboardPage;
