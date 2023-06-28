@@ -1,6 +1,5 @@
 "use client";
 
-import { authenticated } from "@/components/hoc/authenticated";
 import Image from "next/image";
 
 const HomePage = () => {
@@ -115,4 +114,4 @@ const HomePage = () => {
   );
 };
 
-export default authenticated(HomePage);
+export default HomePage;

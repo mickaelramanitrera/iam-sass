@@ -13,10 +13,7 @@ import { Container } from "@/components/container";
 import Link from "next/link";
 import { sleep } from "@/lib/time";
 
-export const revalidate = 0; // opt out of caching for this page
-
 const getData = async () => {
-  console.log("in get data");
   await sleep(4000);
   const orgNumber = Math.floor(Math.random() * 30) + 1;
 
