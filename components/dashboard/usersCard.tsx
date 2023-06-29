@@ -15,7 +15,7 @@ export const UsersCard = () => {
 
     if (isValidating) {
       return (
-        <div className="flex flex-row items-center text-slate-800">
+        <div className="flex flex-row items-center text-gray-500">
           {formattedCount}{" "}
           <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
         </div>
