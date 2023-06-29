@@ -7,6 +7,8 @@ import { Icons } from "@/components/icons";
 export const UsersCard = () => {
   const { count, isLoading, isValidating } = useUsersCount();
   const getUsersCountContent = () => {
+    const formattedCount = count?.toLocaleString("fr-FR") || "0";
+
     if (isLoading) {
       return <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />;
     }
@@ -14,12 +16,13 @@ export const UsersCard = () => {
     if (isValidating) {
       return (
         <div className="flex flex-row items-center text-slate-800">
-          {count} <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
+          {formattedCount}{" "}
+          <Icons.spinner className="ml-2 h-4 w-4 animate-spin" />
         </div>
       );
     }
 
-    return count || "0";
+    return formattedCount || "0";
   };
 
   return (

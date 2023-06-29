@@ -39,7 +39,7 @@ export const CardInfo: FC<cardInfoProps> = ({
         <CardIcon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        {loading && <Skeleton className="w-[36px] h-[36px]" />}
+        {loading && <Skeleton className="w-[31px] h-[28px]" />}
         {!loading && <div className="text-2xl font-bold">{content}</div>}
 
         {loading && <Skeleton className="w-[136px] h-[16px] mt-1" />}

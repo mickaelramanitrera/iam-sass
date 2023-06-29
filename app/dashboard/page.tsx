@@ -3,6 +3,8 @@ import { Container } from "@/components/container";
 import { CardInfo } from "@/components/dashboard/cardInfo";
 import { OrganizationsCard } from "@/components/dashboard/organizationsCard";
 import { UsersCard } from "@/components/dashboard/usersCard";
+import { AverageServiceSpeedCard } from "@/components/dashboard/averageServiceSpeedCard";
+import { ActiveConnectionsCard } from "@/components/dashboard/activeConnectionsCard";
 
 export const metadata: Metadata = {
   title: "Keycloak Kid - Dashboard",
@@ -11,22 +13,6 @@ export const metadata: Metadata = {
 
 const DashboardPage = () => {
   const datas = [
-    {
-      title: "Active connections",
-      content: "8 756",
-      icon: "plug",
-      subContent: "+1780.2% from last month",
-      link: "/dashboard/settings",
-      loading: false,
-    },
-    {
-      title: "Average service speed",
-      content: "12 cnx/s",
-      icon: "radioTower",
-      subContent: "12 seconds since last issue",
-      link: undefined,
-      loading: false,
-    },
     {
       title: "Total resources",
       content: "8 357 564",
@@ -42,6 +28,8 @@ const DashboardPage = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <OrganizationsCard />
         <UsersCard />
+        <ActiveConnectionsCard />
+        <AverageServiceSpeedCard />
         {datas.map((data, index) => (
           <CardInfo
             title={data.title}

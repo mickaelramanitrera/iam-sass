@@ -5,5 +5,5 @@ export const GET = async (_: NextRequest) => {
   // simulate computation
   await sleep(5000);
 
-  return NextResponse.json({ count: Math.floor(Math.random() * 4000) + 14 });
+  return NextResponse.json({ count: Math.floor(Math.random() * 20000) + 1400 });
 };
