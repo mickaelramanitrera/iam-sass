@@ -14,7 +14,10 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
       value={{
         refreshInterval: 3000,
         fetcher: async (resource, init) => {
-          const res = await fetch(resource, init);
+          const res = await fetch(resource, {
+            ...init,
+            next: { revalidate: 0 },
+          });
 
           if (!res.ok) {
             const error = new Error("An error occured fetching the datas");
