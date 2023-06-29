@@ -12,7 +12,7 @@ import { Icons } from "@/components/icons";
 import { ProviderDropdown } from "@/components/providerDropdown";
 import { ProviderContext } from "@/components/contexts/providerContexts";
 import { useToast } from "@/components/ui/use-toast";
-import type { providerFormValuesType } from "../formSchemas/providers";
+import type { providerFormValuesType } from "@/formSchemas/providers";
 
 type ThemeSwitchDropDownProps = {
   setTheme: (theme: string) => void;

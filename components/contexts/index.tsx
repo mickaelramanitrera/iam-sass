@@ -1,13 +1,13 @@
 import { FC, PropsWithChildren } from "react";
-import { UserProvider } from "./userContext";
 import { ProviderProvider } from "./providerContexts";
 import { ThemeProvider } from "@/components/contexts/theme-provider";
+import { SWRContext } from "./swr";
 
 const GlobalProvider: FC<PropsWithChildren<{}>> = ({ children }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <UserProvider>
+    <SWRContext>
       <ProviderProvider>{children}</ProviderProvider>
-    </UserProvider>
+    </SWRContext>
   </ThemeProvider>
 );
 

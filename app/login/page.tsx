@@ -1,12 +1,10 @@
 "use client";
 
-import { useTransition, useContext } from "react";
-import * as z from "zod";
+import { useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { UserContext } from "@/components/contexts/userContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,20 +25,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import "./styles.css";
+import { loginFormSchema, type loginFormValuesType } from "@/formSchemas/login";
 
 import { handleLogin } from "./action";
 
-const loginFormSchema = z.object({
-  email: z.string().email({ message: "Please input a valid email" }).trim(),
-  password: z
-    .string()
-    .min(8, { message: "Password must be minimum 8 characters long" }),
-});
-
 const LoginPage = () => {
-  const { setUser } = useContext(UserContext);
   const router = useRouter();
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const form = useForm<loginFormValuesType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "test@email.com",
@@ -62,7 +53,7 @@ const LoginPage = () => {
     toast(toastValues);
   };
 
-  const onSubmit = (values: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = (values: loginFormValuesType) => {
     // ✅ Values will be type-safe and automatically validated.
     startTransition(async () => {
       const loginSucceeded = await handleLogin(values);
@@ -70,17 +61,9 @@ const LoginPage = () => {
       // show a visual sign of what happened with login (failed or not)
       toastLoginResults(loginSucceeded);
 
-      // set global user contect to "not connected user"
-      // to cleanup the state that might have been there
-      if (!loginSucceeded) {
-        setUser({ email: undefined, connected: false });
-        return;
+      if (loginSucceeded) {
+        router.push("/dashboard");
       }
-
-      // when credentials are valid, set the user in global context
-      // and redirect to main page
-      setUser({ email: values.email, connected: true });
-      router.push("/dashboard");
     });
   };
 

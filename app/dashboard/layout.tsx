@@ -1,10 +1,9 @@
 "use client";
 
 import { useContext, useTransition, FC, PropsWithChildren } from "react";
-import { Header } from "@/app/dashboard/header";
-import { Aside } from "@/app/dashboard/aside";
+import { Header } from "@/components/dashboard/header";
+import { Aside } from "@/components/dashboard/aside";
 import { handleLogout } from "@/app/dashboard/actions";
-import { UserContext } from "@/components/contexts/userContext";
 import { useToast } from "@/components/ui/use-toast";
 import { MobileMenu } from "@/components/responsiveMenu";
 import { useRouter } from "next/navigation";
@@ -12,7 +11,6 @@ import { useRouter } from "next/navigation";
 const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [isLogoutPending, startTransition] = useTransition();
   const { toast } = useToast();
-  const { setUser } = useContext(UserContext);
   const router = useRouter();
 
   const onLogout = () => {
@@ -23,7 +21,6 @@ const DashboardLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
         return;
       }
 
-      setUser({ email: undefined, connected: false });
       toast({ title: "Logout succeeded" });
       router.push("/login");
     });

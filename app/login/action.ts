@@ -1,10 +1,29 @@
 "use server";
 import { cookies } from "next/headers";
-import type { User } from "@/app/types/user";
-import { validateCredentials } from "@/app/services/user";
+import type { User } from "@/types/user";
+import { sleep } from "@/lib/time";
+
+type CredentialsStore = User[];
+
+export const validateCredentials = async ({
+  email,
+  password,
+}: User): Promise<boolean> => {
+  const allowedCredentials: CredentialsStore = [
+    { email: "mickael@email.com", password: "12345678" },
+    { email: "test@email.com", password: "00000000" },
+  ];
+
+  // Simulate latency to see visual FX
+  await sleep(1000);
+
+  return allowedCredentials.some(
+    ({ email: mail, password: pwd }) => mail === email && pwd === password
+  );
+};
 
 export const handleLogin = async (user: User) => {
-  const credentialsAreValid = validateCredentials(user);
+  const credentialsAreValid = await validateCredentials(user);
 
   if (!credentialsAreValid) {
     cookies().set({ name: "user", value: "" });

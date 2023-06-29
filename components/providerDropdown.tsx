@@ -34,7 +34,7 @@ import { Input } from "@/components/ui/input";
 import {
   addProviderFormSchema,
   type providerFormValuesType,
-} from "@/app/formSchemas/providers";
+} from "@/formSchemas/providers";
 
 import { Icons } from "@/components/icons";
 
