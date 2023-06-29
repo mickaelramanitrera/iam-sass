@@ -26,9 +26,16 @@ export const handleLogin = async (user: User) => {
   const credentialsAreValid = await validateCredentials(user);
 
   if (!credentialsAreValid) {
-    cookies().set({ name: "user", value: "" });
+    cookies().set({
+      name: "user",
+      value: "",
+      expires: new Date(),
+    });
     return false;
   }
+
+  const expiration = new Date();
+  expiration.setHours(expiration.getHours() + 1);
 
   cookies().set({
     name: "user",
@@ -37,6 +44,8 @@ export const handleLogin = async (user: User) => {
       connected: true,
     }),
     httpOnly: true,
+    expires: expiration,
   });
+
   return true;
 };
