@@ -15,9 +15,8 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
         refreshInterval: 3000,
         fetcher: async (resource, init) => {
           const res = await fetch(resource, {
+            next: { revalidate: 10 },
             ...init,
-            cache: "no-store",
-            next: { revalidate: 0 },
           });
 
           if (!res.ok) {
@@ -35,7 +34,7 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
           toast({
             variant: "destructive",
             title: "An error occurred",
-            description: "Your authentication has expired, please login again",
+            description: error?.message,
           });
 
           if (error.status === 403) {
