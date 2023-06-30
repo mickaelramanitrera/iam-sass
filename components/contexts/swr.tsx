@@ -16,6 +16,7 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
         fetcher: async (resource, init) => {
           const res = await fetch(resource, {
             ...init,
+            cache: "no-store",
             next: { revalidate: 0 },
           });
 
