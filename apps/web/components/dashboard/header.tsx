@@ -13,6 +13,7 @@ import { ProviderDropdown } from "@/components/providerDropdown";
 import { ProviderContext } from "@/components/contexts/providerContexts";
 import { useToast } from "@/components/ui/use-toast";
 import type { providerFormValuesType } from "@/formSchemas/providers";
+import { useProviderConnect } from "@/services/providers";
 
 type ThemeSwitchDropDownProps = {
   setTheme: (theme: string) => void;
@@ -56,6 +57,7 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
   const { currentProvider = 1, setProvider } = useContext(ProviderContext);
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { trigger } = useProviderConnect();
 
   const handleChangeProvider = (id: number) => {
     if (currentProvider !== id) {
@@ -64,7 +66,22 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
     }
   };
 
-  const handleCreateProvider = (value: providerFormValuesType) => {
+  const handleCreateProvider = async (value: providerFormValuesType) => {
+    const connectionResults = await trigger({
+      username: value.masterUsername,
+      pwd: value.masterPassword,
+      url: value.url,
+    });
+
+    if (connectionResults?.error) {
+      toast({
+        title: "Adding provider errored",
+        variant: "destructive",
+        description: connectionResults.error,
+      });
+      return false;
+    }
+
     setModalOpen(false);
     const newProviderId = providers.length + 1;
     setProviders([...providers, { name: value.name, id: newProviderId }]);

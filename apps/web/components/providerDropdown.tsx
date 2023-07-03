@@ -112,6 +112,12 @@ const AddProviderForm: FC<{
   const form = useForm<z.infer<typeof addProviderFormSchema>>({
     resolver: zodResolver(addProviderFormSchema),
     resetOptions: { keepValues: false },
+    defaultValues: {
+      name: "",
+      url: "",
+      masterUsername: "",
+      masterPassword: "",
+    },
   });
 
   useEffect(() => {
