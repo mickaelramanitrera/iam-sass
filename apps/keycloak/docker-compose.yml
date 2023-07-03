@@ -1,0 +1,13 @@
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.1.2
+    container_name: my_keycloak_instance
+    ports:
+      - "3001:8080"
+    environment:
+      KEYCLOAK_ADMIN: "admin"
+      KEYCLOAK_ADMIN_PASSWORD: "admin"
+      KC_HTTP_RELATIVE_PATH: "keycloak"
+    command: start-dev
+    volumes:
+      - "./data:/opt/keycloak/data"
