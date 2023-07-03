@@ -1,4 +1,6 @@
-"use client";
+// @Deprecated
+// This will never be rendered as there is a permanent redirection
+// to `/dashboard` - Will see what we do with this page in the future (Landing page maybe??)
 
 import Image from "next/image";
 
