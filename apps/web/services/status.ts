@@ -10,7 +10,6 @@ export const useServiceStats = () => {
   return {
     speed: data?.speed,
     activeConnections: data?.activeConnections,
-    totalResources: data?.totalResources,
     isLoading,
     isError: error,
     isValidating,
