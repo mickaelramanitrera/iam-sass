@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "@/components/ui/toaster";
 import GlobalProvider from "@/components/contexts";
 import "styles/globals.css";
@@ -18,6 +19,7 @@ export default function RootLayout({
         <GlobalProvider>
           {children}
           <Toaster />
+          <Analytics />
         </GlobalProvider>
       </body>
     </html>
