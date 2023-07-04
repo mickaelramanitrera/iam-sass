@@ -40,21 +40,16 @@ const ThemeSwitchDropdown: FC<ThemeSwitchDropDownProps> = ({ setTheme }) => (
   </DropdownMenu>
 );
 
-type Provider = { name: string; id: number };
-
 type Props = { onLogout: () => void; logoutPending?: boolean };
 
 export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
   const { setTheme } = useTheme();
-  const [providers, setProviders] = useState<Provider[]>([
-    {
-      name: "Keycloak Staging",
-      id: 1,
-    },
-    { name: "Keycloak Production", id: 2 },
-    { name: "Keycloak Local", id: 3 },
-  ]);
-  const { currentProvider = 1, setProvider } = useContext(ProviderContext);
+  const {
+    currentProvider = 1,
+    setProvider,
+    providers,
+    addProvider,
+  } = useContext(ProviderContext);
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { trigger } = useProviderConnect();
@@ -82,10 +77,15 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
       return false;
     }
 
-    setModalOpen(false);
     const newProviderId = providers.length + 1;
-    setProviders([...providers, { name: value.name, id: newProviderId }]);
+    addProvider({
+      id: newProviderId,
+      name: value.name,
+      token: connectionResults?.access_token,
+    });
     handleChangeProvider(newProviderId);
+
+    setModalOpen(false);
   };
 
   return (

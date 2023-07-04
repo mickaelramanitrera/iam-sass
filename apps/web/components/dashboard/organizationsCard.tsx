@@ -1,11 +1,21 @@
 "use client";
 
+import { useContext } from "react";
 import { CardInfo } from "@/components/dashboard/cardInfo";
 import { useOrganizationsCount } from "@/services/organizations";
 import { Icons } from "@/components/icons";
+import { ProviderContext } from "@/components/contexts/providerContexts";
 
 export const OrganizationsCard = () => {
-  const { count, isLoading, isValidating } = useOrganizationsCount();
+  const { providers, currentProvider } = useContext(ProviderContext);
+  const currentProviderToken = (
+    providers.find((provider) => provider.id === currentProvider) ||
+    providers[0]
+  ).token;
+
+  const { count, isLoading, isValidating } =
+    useOrganizationsCount(currentProviderToken);
+
   const getOrganizationsCountContent = () => {
     if (isLoading) {
       return <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />;
