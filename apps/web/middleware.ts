@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export const config = {
-  matcher: ["/", "/dashboard/:path*", "/api/:path*"],
+  matcher: ["/", "/dashboard/:path*", "/api/:path*", "/login"],
 };
 
-const forbiddenResponse = (request: NextRequest) => {
+const forbiddenResponseOrRedirect = (request: NextRequest) => {
   const isApi = request.nextUrl.pathname.startsWith("/api");
 
   if (isApi) {
@@ -15,16 +15,30 @@ const forbiddenResponse = (request: NextRequest) => {
   return NextResponse.redirect(new URL("/login", request.url));
 };
 
-export const middleware = (request: NextRequest) => {
-  let currentUser = request.cookies.get("user");
-  if (!currentUser?.value) {
-    return forbiddenResponse(request);
+const handleLoginPageRedirections = (
+  request: NextRequest,
+  hasValidConnectionCookie: boolean
+) => {
+  if (hasValidConnectionCookie) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  currentUser = JSON.parse(currentUser.value);
+  return NextResponse.next();
+};
 
-  if (!(currentUser as any)?.connected) {
-    return forbiddenResponse(request);
+export const middleware = (request: NextRequest) => {
+  const currentUserCookie = request.cookies.get("user")?.value;
+  const currentUser = JSON.parse(currentUserCookie || "{}");
+  const isConnected = (currentUser as any)?.connected;
+  const isOnLoginPage = request.nextUrl.pathname.startsWith("/login");
+  const hasValidConnectionCookie = !!currentUserCookie && isConnected;
+
+  if (isOnLoginPage) {
+    return handleLoginPageRedirections(request, hasValidConnectionCookie);
+  }
+
+  if (!hasValidConnectionCookie) {
+    return forbiddenResponseOrRedirect(request);
   }
 
   return NextResponse.next();
