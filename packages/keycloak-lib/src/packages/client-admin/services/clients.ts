@@ -1,4 +1,4 @@
-import AuthenticatedService from './authenticatedService';
+import AuthenticatedService from "./authenticatedService";
 
 export type KeycloakClientObject = {
   id: string;
@@ -15,17 +15,29 @@ export default class Clients extends AuthenticatedService {
    * @returns {KeycloakClientObject || null}
    */
   async get(clientId: string): Promise<KeycloakClientObject | null> {
-    const clients = await this.adminRestClient.getClient().get<KeycloakClientObject[]>(`clients`, {
-      params: {
-        clientId,
-        deep: true,
-      },
-    });
+    const clients = await this.list({ clientId });
 
-    if (!clients?.data?.length) {
+    if (!clients?.length) {
       return null;
     }
 
-    return clients.data[0];
+    return clients[0];
+  }
+
+  async list({
+    clientId,
+  }: {
+    clientId?: string;
+  }): Promise<KeycloakClientObject[]> {
+    const clients = await this.adminRestClient
+      .getClient()
+      .get<KeycloakClientObject[]>(`clients`, {
+        params: {
+          deep: true,
+          ...(clientId ? { clientId } : {}),
+        },
+      });
+
+    return clients.data;
   }
 }

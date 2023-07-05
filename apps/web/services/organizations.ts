@@ -2,7 +2,7 @@
 
 import useSwr from "swr";
 
-export const useOrganizationsCount = (token?: string) => {
+export const useOrganizationsCount = (token?: string, serverUrl?: string) => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/organizations/count",
     async (url) => {
@@ -10,6 +10,7 @@ export const useOrganizationsCount = (token?: string) => {
         method: "GET",
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(serverUrl ? { ["x-kc-server-url"]: serverUrl } : {}),
         },
       }).then((res) => res.json());
     },

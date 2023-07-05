@@ -61,11 +61,16 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
     }
   };
 
-  const handleCreateProvider = async (value: providerFormValuesType) => {
+  const handleCreateProvider = async ({
+    masterUsername: username,
+    masterPassword: pwd,
+    url,
+    name,
+  }: providerFormValuesType) => {
     const connectionResults = await trigger({
-      username: value.masterUsername,
-      pwd: value.masterPassword,
-      url: value.url,
+      username,
+      pwd,
+      url,
     });
 
     if (connectionResults?.error) {
@@ -80,8 +85,9 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
     const newProviderId = providers.length + 1;
     addProvider({
       id: newProviderId,
-      name: value.name,
+      name,
       token: connectionResults?.access_token,
+      url,
     });
     handleChangeProvider(newProviderId);
 

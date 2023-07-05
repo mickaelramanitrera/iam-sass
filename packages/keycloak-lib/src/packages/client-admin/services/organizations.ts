@@ -1,16 +1,20 @@
-import AuthenticatedService from './authenticatedService';
+import AuthenticatedService from "./authenticatedService";
 import {
   KeycloakOrganizationObject,
   KeycloakOrganizationPayload,
   KeycloakUserObject,
-} from '../../types';
-import { AddProjectToOrgError, UserDoesNotExistsError } from './errors';
-import { AdminRestClientError } from '../../errors';
-import { PermissionNaming } from '../naming';
+} from "../../types";
+import { AddProjectToOrgError, UserDoesNotExistsError } from "./errors";
+import { AdminRestClientError } from "../../errors";
+import { PermissionNaming } from "../naming";
 
 export type ListFilters = { search?: string; first?: number; max?: number };
 
-type ListMembersFilters = { briefRepresentation?: boolean; first?: number; max?: number };
+type ListMembersFilters = {
+  briefRepresentation?: boolean;
+  first?: number;
+  max?: number;
+};
 
 type AddProjectPermissionArgs = {
   projectId: string;
@@ -31,10 +35,12 @@ export default class Organizations extends AuthenticatedService {
    * @param {KeycloakOrganizationPayload} organizationPayload - the organization we want to create
    * @returns {boolean} - true for all status code below 400. There is no data returned by the api for this
    */
-  async create(organizationPayload: KeycloakOrganizationPayload): Promise<boolean> {
+  async create(
+    organizationPayload: KeycloakOrganizationPayload
+  ): Promise<boolean> {
     const organizationResponse = await this.adminRestClient
       .getClient()
-      .post<KeycloakOrganizationObject>('groups', organizationPayload);
+      .post<KeycloakOrganizationObject>("groups", organizationPayload);
 
     return organizationResponse.status < 400;
   }
@@ -47,12 +53,12 @@ export default class Organizations extends AuthenticatedService {
   async list(filters?: ListFilters): Promise<KeycloakOrganizationObject[]> {
     const organizationResponse = await this.adminRestClient
       .getClient()
-      .get<KeycloakOrganizationObject[]>('groups', {
+      .get<KeycloakOrganizationObject[]>("groups", {
         params: filters || {},
       });
 
     if (!organizationResponse.data) {
-      console.warn('organizations.list : rest did not return any data');
+      console.warn("organizations.list : rest did not return any data");
       return [];
     }
 
@@ -82,7 +88,9 @@ export default class Organizations extends AuthenticatedService {
       return false;
     }
 
-    await this.adminRestClient.getClient().put(`users/${userId}/groups/${groupId}`);
+    await this.adminRestClient
+      .getClient()
+      .put(`users/${userId}/groups/${groupId}`);
 
     return true;
   }
@@ -110,7 +118,9 @@ export default class Organizations extends AuthenticatedService {
       return false;
     }
 
-    await this.adminRestClient.getClient().delete(`users/${userId}/groups/${groupId}`);
+    await this.adminRestClient
+      .getClient()
+      .delete(`users/${userId}/groups/${groupId}`);
 
     return true;
   }
@@ -121,7 +131,10 @@ export default class Organizations extends AuthenticatedService {
    * @param {ListMemberFilters} filters - filters to apply, with pagination
    * @returns {KeycloakUserObject[]}
    */
-  async listMembers(groupId: string, filters?: ListMembersFilters): Promise<KeycloakUserObject[]> {
+  async listMembers(
+    groupId: string,
+    filters?: ListMembersFilters
+  ): Promise<KeycloakUserObject[]> {
     const membersResponse = await this.adminRestClient
       .getClient()
       .get<KeycloakUserObject[]>(`groups/${groupId}/members`, {
@@ -137,12 +150,18 @@ export default class Organizations extends AuthenticatedService {
    * @param {ListFilters} paginationOpts - result pagination option
    * @returns KeycloakOrganizationObject[]
    */
-  async listUserMemberships(userId: string, paginationOpts?: Omit<ListFilters, 'search'>) {
+  async listUserMemberships(
+    userId: string,
+    paginationOpts?: Omit<ListFilters, "search">
+  ) {
     const membershipsResponse = await this.adminRestClient
       .getClient()
-      .get<Omit<KeycloakOrganizationObject, 'attributes'>[]>(`users/${userId}/groups`, {
-        params: paginationOpts || {},
-      });
+      .get<Omit<KeycloakOrganizationObject, "attributes">[]>(
+        `users/${userId}/groups`,
+        {
+          params: paginationOpts || {},
+        }
+      );
 
     return membershipsResponse.data;
   }
@@ -161,37 +180,45 @@ export default class Organizations extends AuthenticatedService {
   }: AddProjectPermissionArgs): Promise<boolean> {
     const scopesIds = await this.transformScopeNamesToScopeIds(scopeNames);
 
-    const organizationPolicy = await this.adminRestClient.policies.findOrCreateOrganizationPolicy(
-      groupId
-    );
+    const organizationPolicy =
+      await this.adminRestClient.policies.findOrCreateOrganizationPolicy(
+        groupId
+      );
     if (!organizationPolicy) {
       throw new AddProjectToOrgError(
-        'could not find nor create organization authorize policy',
+        "could not find nor create organization authorize policy",
         projectId,
         groupId,
         role
       );
     }
 
-    const rolePolicy = await this.adminRestClient.policies.findOrCreateRolePolicy(role);
+    const rolePolicy =
+      await this.adminRestClient.policies.findOrCreateRolePolicy(role);
     if (!rolePolicy) {
       throw new AddProjectToOrgError(
-        'could not find nor create role policy',
+        "could not find nor create role policy",
         projectId,
         groupId,
         role
       );
     }
 
-    const organizationPermission = await this.adminRestClient.permissions.findOrCreatePermission({
-      name: PermissionNaming.getNameForOrgWithRole(groupId, role),
-      policiesIds: [rolePolicy.id, organizationPolicy.id],
-      scopes: scopesIds,
-      projectId,
-    });
+    const organizationPermission =
+      await this.adminRestClient.permissions.findOrCreatePermission({
+        name: PermissionNaming.getNameForOrgWithRole(groupId, role),
+        policiesIds: [rolePolicy.id, organizationPolicy.id],
+        scopes: scopesIds,
+        projectId,
+      });
 
     if (!organizationPermission) {
-      throw new AddProjectToOrgError('No permissions were created', projectId, groupId, role);
+      throw new AddProjectToOrgError(
+        "No permissions were created",
+        projectId,
+        groupId,
+        role
+      );
     }
 
     return true;
@@ -223,9 +250,10 @@ export default class Organizations extends AuthenticatedService {
     // Get the unique permission by the naming convention
     // this will throw an error if it find more than one permission
     // multiple permission with same name must not exist
-    const permission = await this.adminRestClient.permissions.findUniquePermissionByName(
-      PermissionNaming.getNameForOrgWithRole(groupId, roleName)
-    );
+    const permission =
+      await this.adminRestClient.permissions.findUniquePermissionByName(
+        PermissionNaming.getNameForOrgWithRole(groupId, roleName)
+      );
 
     // if the permission doesn't exists anymore, we don't need to do anything
     if (!permission) {
@@ -236,7 +264,9 @@ export default class Organizations extends AuthenticatedService {
     }
 
     // Get the full permission object to get access to scopes, resources, and policies
-    const fullPermissionObject = await this.adminRestClient.permissions.get(permission.id);
+    const fullPermissionObject = await this.adminRestClient.permissions.get(
+      permission.id
+    );
     if (!fullPermissionObject) {
       throw new AdminRestClientError(
         `organizations.removeProjectForRole: Could not find full permission object for ${permission.id}`
@@ -276,7 +306,7 @@ export default class Organizations extends AuthenticatedService {
   }
 
   private async transformScopeNamesToScopeIds(scopeNames: string[]) {
-    const allScopes = await this.adminRestClient.scopes.list(this.adminRestClient.clientId);
+    const allScopes = await this.adminRestClient.scopes.list("any");
     if (!allScopes?.length) {
       throw new AdminRestClientError(
         `organizations.addProject.transformScopeNamesToScopeIds: no scopes found for client`
@@ -286,10 +316,12 @@ export default class Organizations extends AuthenticatedService {
 
     if (!scopeNames.every((scopeName) => allScopesNames.includes(scopeName))) {
       throw new AdminRestClientError(
-        'organizations.addProject.transformScopeNamesToScopeIds: Some scopes are missing. They need to be resynced'
+        "organizations.addProject.transformScopeNamesToScopeIds: Some scopes are missing. They need to be resynced"
       );
     }
 
-    return allScopes.filter((scope) => scopeNames.includes(scope.name)).map((scope) => scope.id);
+    return allScopes
+      .filter((scope) => scopeNames.includes(scope.name))
+      .map((scope) => scope.id);
   }
 }

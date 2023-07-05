@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  transpilePackages: ["keycloak-lib"],
   experimental: {
     serverActions: true,
   },

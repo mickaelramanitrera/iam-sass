@@ -28,9 +28,10 @@ export const ProviderProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       name: "Keycloak Staging",
       id: 1,
       token: "",
+      url: "",
     },
-    { name: "Keycloak Production", id: 2, token: "" },
-    { name: "Keycloak Local", id: 3, token: "" },
+    { name: "Keycloak Production", id: 2, token: "", url: "" },
+    { name: "Keycloak Local", id: 3, token: "", url: "" },
   ]);
 
   return (
