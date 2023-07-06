@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sleep } from "@/lib/time";
-import { forceRevalidate } from "@/app/api/utils";
+import { forceRevalidate, routeHandler } from "@/app/api/utils";
 
-export const GET = async (request: NextRequest) => {
+export const GET = routeHandler(async (request: NextRequest) => {
   forceRevalidate(request);
 
   // simulate computation
@@ -12,4 +12,4 @@ export const GET = async (request: NextRequest) => {
     speed: Math.floor(Math.random() * 50) + 10,
     activeConnections: Math.floor(Math.random() * 10_000) + 3_800,
   });
-};
+});

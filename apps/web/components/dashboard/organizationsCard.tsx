@@ -12,7 +12,7 @@ export const OrganizationsCard = () => {
     providers.find((provider) => provider.id === currentProvider) ||
     providers[0];
 
-  const { count, isLoading, isValidating } = useOrganizationsCount(
+  const { count, isLoading, isValidating, error } = useOrganizationsCount(
     currentProviderToken,
     serverUrl
   );
@@ -41,6 +41,8 @@ export const OrganizationsCard = () => {
       subContent={`+${(count * 1.78).toFixed(2)}% from last month`}
       link="/dashboard/organizations"
       loading={isLoading}
+      errored={Boolean(error)}
+      errorMessage={(error as Error)?.message}
     />
   );
 };

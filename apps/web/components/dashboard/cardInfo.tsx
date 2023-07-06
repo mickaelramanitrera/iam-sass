@@ -20,6 +20,8 @@ type cardInfoProps = {
   icon: keyof typeof Icons;
   link?: string;
   loading?: boolean;
+  errored?: boolean;
+  errorMessage?: string;
 };
 
 export const CardInfo: FC<cardInfoProps> = ({
@@ -29,6 +31,8 @@ export const CardInfo: FC<cardInfoProps> = ({
   icon,
   link,
   loading,
+  errored,
+  errorMessage,
 }) => {
   const CardIcon = Icons[icon];
 
@@ -45,6 +49,12 @@ export const CardInfo: FC<cardInfoProps> = ({
         {loading && <Skeleton className="w-[136px] h-[16px] mt-1" />}
         {!loading && (
           <p className="text-xs text-muted-foreground">{subContent}</p>
+        )}
+
+        {errored && (
+          <p className="text-xs text-red-700">
+            {errorMessage || "There was an error fetching the data"}
+          </p>
         )}
       </CardContent>
       {link && (

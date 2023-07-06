@@ -6,6 +6,7 @@ export type KeycloakClientObject = {
   description?: string;
   enabled: boolean;
   secret: string;
+  name: string;
 };
 
 export default class Clients extends AuthenticatedService {

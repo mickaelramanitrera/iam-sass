@@ -4,6 +4,7 @@ import { FC, PropsWithChildren } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { SWRConfig } from "swr";
+import { FetchError } from "@/lib/swr-utils";
 
 export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
   const router = useRouter();
@@ -20,17 +21,15 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
           });
 
           if (!res.ok) {
-            const error = new Error("An error occured fetching the datas");
-
-            (error as any).info = await res.json();
-            (error as any).status = res.status;
-
-            throw error;
+            throw new FetchError(
+              "An error occured fetching the datas",
+              res.status
+            );
           }
 
           return res.json();
         },
-        onError: (error, _) => {
+        onError: (error: FetchError, _) => {
           toast({
             variant: "destructive",
             title: "An error occurred",
