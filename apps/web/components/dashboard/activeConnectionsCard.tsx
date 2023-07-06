@@ -31,7 +31,9 @@ export const ActiveConnectionsCard = () => {
       title="Active connections"
       content={getActiveConnectionsContent()}
       icon="plug"
-      subContent={`+${(activeConnections * 1.78).toFixed(2)}% from last month`}
+      subContent={`+${((activeConnections || 0) * 1.78).toFixed(
+        2
+      )}% from last month`}
       loading={isLoading}
       link="/dashboard/settings"
     />

@@ -6,7 +6,7 @@ import { swrFetchHandler } from "@/lib/swr-utils";
 export const useOrganizationsCount = (token?: string, serverUrl?: string) => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/organizations/count",
-    swrFetchHandler(() => ({
+    swrFetchHandler<{ count: 0 }>(() => ({
       method: "GET",
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

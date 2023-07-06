@@ -6,7 +6,7 @@ import { swrFetchHandler } from "@/lib/swr-utils";
 export const useResources = () => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/resources/count",
-    swrFetchHandler(),
+    swrFetchHandler<{ totalResources: number }>(),
     {
       // Only revalidate data when component mounts
       refreshInterval: 0,

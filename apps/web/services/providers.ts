@@ -17,7 +17,9 @@ type Args = z.infer<typeof ArgsSchema>;
 export const useProviderConnect = () => {
   const { trigger, isMutating } = useSWRMutation(
     "/api/providers/connect",
-    swrFetchHandler((args) => {
+    swrFetchHandler<{
+      access_token: string;
+    }>((args) => {
       const {
         arg: { url, username, pwd },
       }: Args = ArgsSchema.parse(args?.[1]);

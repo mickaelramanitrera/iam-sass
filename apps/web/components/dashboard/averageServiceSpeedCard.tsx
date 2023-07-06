@@ -27,7 +27,7 @@ export const AverageServiceSpeedCard = () => {
       title="Average service speed"
       content={getServiceSpeedContent()}
       icon="radioTower"
-      subContent={`${(speed * 1.78).toFixed(2)}s since last issue`}
+      subContent={`${((speed || 0) * 1.78).toFixed(2)}s since last issue`}
       loading={isLoading}
     />
   );

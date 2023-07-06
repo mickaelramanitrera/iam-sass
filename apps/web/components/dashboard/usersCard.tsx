@@ -30,7 +30,7 @@ export const UsersCard = () => {
       title="Users"
       content={getUsersCountContent()}
       icon="users"
-      subContent={`+${(count * 1.23).toFixed(2)}% from last month`}
+      subContent={`+${((count || 0) * 1.23).toFixed(2)}% from last month`}
       link="/dashboard/users"
       loading={isLoading}
     />

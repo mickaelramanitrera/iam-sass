@@ -6,7 +6,7 @@ import { swrFetchHandler } from "@/lib/swr-utils";
 export const useUsersCount = () => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/users/count",
-    swrFetchHandler(),
+    swrFetchHandler<{ count: number }>(),
     {
       refreshInterval: 7000,
     }

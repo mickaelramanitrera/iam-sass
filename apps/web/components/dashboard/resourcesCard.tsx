@@ -31,7 +31,9 @@ export const ResourcesCard = () => {
       title="Total resources"
       content={getResourcesContent()}
       icon="boxes"
-      subContent={`+${(totalResources * 9.78).toFixed(2)}% from last month`}
+      subContent={`+${((totalResources || 0) * 9.78).toFixed(
+        2
+      )}% from last month`}
       loading={isLoading}
       link={undefined}
     />

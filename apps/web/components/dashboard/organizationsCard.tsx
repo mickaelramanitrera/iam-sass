@@ -38,7 +38,7 @@ export const OrganizationsCard = () => {
       title="Organizations"
       content={getOrganizationsCountContent()}
       icon="building"
-      subContent={`+${(count * 1.78).toFixed(2)}% from last month`}
+      subContent={`+${((count || 0) * 1.78).toFixed(2)}% from last month`}
       link="/dashboard/organizations"
       loading={isLoading}
       errored={Boolean(error)}
