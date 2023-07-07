@@ -1,1 +1,8 @@
-export type Provider = { name: string; id: number; token: string; url: string };
+export type Provider = {
+  id: number;
+  name: string;
+  token: string;
+  url: string;
+  username: string;
+  pwd: string;
+};

@@ -13,12 +13,15 @@ export const routeHandler =
     try {
       return await handler(request);
     } catch (e) {
+      const errorStatus =
+        (e as any)?.cause?.status || (e as any)?.status || 500;
+
       return NextResponse.json(
         {
           error: (e as Error)?.message,
-          errorStatus: (e as any)?.status || 500,
+          errorStatus,
         },
-        { status: 500 }
+        { status: errorStatus }
       );
     }
   };

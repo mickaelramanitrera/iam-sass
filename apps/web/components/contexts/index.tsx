@@ -5,9 +5,9 @@ import { SWRContext } from "./swr";
 
 const GlobalProvider: FC<PropsWithChildren<{}>> = ({ children }) => (
   <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-    <SWRContext>
-      <ProviderProvider>{children}</ProviderProvider>
-    </SWRContext>
+    <ProviderProvider>
+      <SWRContext>{children}</SWRContext>
+    </ProviderProvider>
   </ThemeProvider>
 );
 

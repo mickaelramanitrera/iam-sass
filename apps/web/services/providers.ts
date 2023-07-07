@@ -15,7 +15,7 @@ const ArgsSchema = z.object({
 type Args = z.infer<typeof ArgsSchema>;
 
 export const useProviderConnect = () => {
-  const { trigger, isMutating } = useSWRMutation(
+  const { trigger, isMutating, error } = useSWRMutation(
     "/api/providers/connect",
     swrFetchHandler<{
       access_token: string;
@@ -31,5 +31,5 @@ export const useProviderConnect = () => {
     })
   );
 
-  return { isLoading: isMutating, trigger };
+  return { isLoading: isMutating, trigger, error };
 };

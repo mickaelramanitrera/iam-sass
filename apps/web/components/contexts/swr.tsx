@@ -1,14 +1,56 @@
 "use client";
 
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useContext } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { SWRConfig } from "swr";
 import { FetchError } from "@/lib/swr-utils";
+import { useProviderConnect } from "@/services/providers";
+import { ProviderContext } from "@/components/contexts/providerContexts";
 
 export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
   const router = useRouter();
   const { toast } = useToast();
+  const { trigger: triggerProviderConnect, error: connectionError } =
+    useProviderConnect();
+  const {
+    currentProvider: currentProviderId = 1,
+    providers,
+    refreshTokenFor,
+  } = useContext(ProviderContext);
+
+  const currentProvider = providers.find(
+    (provider) => provider.id === currentProviderId
+  );
+
+  const handle401Error = async () => {
+    const { username, pwd, url, id: currentProviderId } = currentProvider!;
+    const reconnectResults = await triggerProviderConnect({
+      username,
+      pwd,
+      url,
+    });
+
+    let errorMessage = "";
+    if (connectionError) {
+      errorMessage = (connectionError as Error)?.message || "Unknown Error";
+    }
+    if (!reconnectResults?.access_token) {
+      errorMessage = "No access token was retrieved from auto-reconnection";
+    }
+
+    if (errorMessage) {
+      toast({
+        variant: "destructive",
+        title: "An error occurred while reconnecting",
+        description: errorMessage,
+      });
+
+      return;
+    }
+
+    refreshTokenFor(currentProviderId, reconnectResults.access_token);
+  };
 
   return (
     <SWRConfig
@@ -29,7 +71,8 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
 
           return res.json();
         },
-        onError: (error: FetchError, _) => {
+        onError: async (error: FetchError, _) => {
+          console.log("Error occurred with status", error.status);
           toast({
             variant: "destructive",
             title: "An error occurred",
@@ -38,6 +81,11 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
 
           if (error.status === 403) {
             router.push("/login");
+            return;
+          }
+
+          if (error.status === 401) {
+            await handle401Error();
           }
         },
       }}

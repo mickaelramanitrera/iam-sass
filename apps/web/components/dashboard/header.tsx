@@ -88,6 +88,8 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
       name,
       token: connectionResults?.access_token,
       url,
+      username,
+      pwd,
     });
     handleChangeProvider(newProviderId);
 

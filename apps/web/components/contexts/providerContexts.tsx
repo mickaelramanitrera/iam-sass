@@ -13,25 +13,30 @@ export type ProviderContextState = {
   setProvider: (providerId: number) => void;
   providers: Provider[];
   addProvider: (provider: Provider) => void;
+  refreshTokenFor: (providerId: number, token: string) => void;
 };
 
 export const ProviderContext = createContext<ProviderContextState>({
   setProvider: (_: number) => {},
   providers: [],
   addProvider: (_: Provider) => {},
+  refreshTokenFor: (_providerId: number, _token: string) => {},
 });
+
+const fakeProvider = {
+  name: "Keycloak Staging",
+  id: 1,
+  token: "",
+  url: "",
+  username: "",
+  pwd: "",
+};
 
 export const ProviderProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [providerId, setProvider] = useState<number>();
   const [providers, setProviders] = useState<Provider[]>([
-    {
-      name: "Keycloak Staging",
-      id: 1,
-      token: "",
-      url: "",
-    },
-    { name: "Keycloak Production", id: 2, token: "", url: "" },
-    { name: "Keycloak Local", id: 3, token: "", url: "" },
+    { ...fakeProvider },
+    { ...fakeProvider, name: "Keycloak Production", id: 2 },
   ]);
 
   return (
@@ -41,6 +46,19 @@ export const ProviderProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         setProvider,
         addProvider: (provider: Provider) => {
           setProviders([...providers, provider]);
+        },
+        refreshTokenFor: (providerId: number, token: string) => {
+          const newProviders = [...providers];
+
+          newProviders.map((p) => {
+            if (p.id === providerId) {
+              p.token = token;
+            }
+
+            return p;
+          });
+
+          setProviders(newProviders);
         },
         providers,
       }}

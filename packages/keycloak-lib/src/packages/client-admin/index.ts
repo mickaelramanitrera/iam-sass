@@ -74,6 +74,8 @@ export default class AdminRestClient {
         error?.response?.data?.error ||
         error.message;
 
+      error.status = error?.response?.status || 500;
+
       const sanitizedError = sanitizeAxiosError(error);
 
       return Promise.reject(
