@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -44,7 +44,7 @@ type Props = {
   providers: ProviderListing[];
   selectedProviderId: number;
   onChange: (id: number) => void;
-  onCreateProvider: (newProvider: providerFormValuesType) => void;
+  onCreateProvider: (newProvider: providerFormValuesType) => Promise<void>;
   modalOpen: boolean;
   setModalOpen: (open: boolean) => void;
 };
@@ -107,7 +107,7 @@ export const ProviderDropdown: FC<Props> = ({
 };
 
 const AddProviderForm: FC<{
-  onFormSave: (val: providerFormValuesType) => void;
+  onFormSave: (val: providerFormValuesType) => Promise<void>;
 }> = ({ onFormSave }) => {
   const form = useForm<z.infer<typeof addProviderFormSchema>>({
     resolver: zodResolver(addProviderFormSchema),
@@ -119,13 +119,18 @@ const AddProviderForm: FC<{
       masterPassword: "",
     },
   });
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  useEffect(() => {
-    // reset the form values if form submission went well
-    if (form.formState.isSubmitSuccessful) {
+  const onSubmit = async (values: providerFormValuesType) => {
+    try {
+      setIsSubmitting(true);
+      await onFormSave(values);
       form.reset();
+    } catch (e: unknown) {
+    } finally {
+      setIsSubmitting(false);
     }
-  }, [form.formState]);
+  };
 
   return (
     <DialogContent>
@@ -137,7 +142,7 @@ const AddProviderForm: FC<{
       </DialogHeader>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSave)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <FormField
               control={form.control}
@@ -198,7 +203,7 @@ const AddProviderForm: FC<{
             />
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={form.formState.isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Save
             </Button>
           </DialogFooter>

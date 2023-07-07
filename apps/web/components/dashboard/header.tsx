@@ -79,7 +79,7 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
         variant: "destructive",
         description: connectionResults.error,
       });
-      return false;
+      return;
     }
 
     const newProviderId = providers.length + 1;
