@@ -9,7 +9,10 @@ const forbiddenResponseOrRedirect = (request: NextRequest) => {
   const isApi = request.nextUrl.pathname.startsWith("/api");
 
   if (isApi) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Unauthorized", errorStatus: 403 },
+      { status: 403 }
+    );
   }
 
   return NextResponse.redirect(new URL("/login", request.url));

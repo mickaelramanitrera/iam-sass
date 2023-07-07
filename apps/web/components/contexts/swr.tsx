@@ -50,6 +50,9 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
     }
 
     refreshTokenFor(currentProviderId, reconnectResults.access_token);
+    toast({
+      title: "Authentication to provider recovered",
+    });
   };
 
   return (
