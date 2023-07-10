@@ -14,6 +14,7 @@ import { ProviderContext } from "@/components/contexts/providerContexts";
 import { useToast } from "@/components/ui/use-toast";
 import type { providerFormValuesType } from "@/formSchemas/providers";
 import { useProviderConnect } from "@/services/providers";
+import { useSWRConfig } from "swr";
 
 type ThemeSwitchDropDownProps = {
   setTheme: (theme: string) => void;
@@ -53,10 +54,20 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
   const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { trigger } = useProviderConnect();
+  const { mutate } = useSWRConfig();
 
   const handleChangeProvider = (id: number) => {
     if (currentProvider !== id) {
       setProvider(id);
+      // Invalidate cache for orgs count on provider change
+      // so that data is refetch right away for the new selected provider
+      mutate("/api/organizations/count", async () => {
+        // Pass this async function so that cache revalidation
+        // happens AFTER the state update that re-fetch with the new headers
+        // If we don't pass it, the first cache revalidation is done with the
+        // old headers as the state update happens after the re-fetch
+        return { count: 0 };
+      });
       toast({ title: "New provider selected !" });
     }
   };
@@ -95,6 +106,16 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
       realmName,
     });
     handleChangeProvider(newProviderId);
+
+    // Invalidate cache for orgs count on provider change
+    // so that data is refetch right away for the new selected provider
+    mutate("/api/organizations/count", async () => {
+      // Pass this async function so that cache revalidation
+      // happens AFTER the state update that re-fetch with the new headers
+      // If we don't pass it, the first cache revalidation is done with the
+      // old headers as the state update happens after the re-fetch
+      return { count: 0 };
+    });
 
     setModalOpen(false);
   };
