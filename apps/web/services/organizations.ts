@@ -16,7 +16,7 @@ export const useOrganizationsCount = ({
 }: Args) => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/organizations/count",
-    swrFetchHandler<{ count: 0 }>(() => ({
+    swrFetchHandler<{ count: number }>(() => ({
       method: "GET",
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
