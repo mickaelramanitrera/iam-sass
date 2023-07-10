@@ -9,6 +9,7 @@ const ArgsSchema = z.object({
     username: z.string(),
     pwd: z.string(),
     url: z.string().url(),
+    realmName: z.string(),
   }),
 });
 
@@ -21,12 +22,12 @@ export const useProviderConnect = () => {
       access_token: string;
     }>((args) => {
       const {
-        arg: { url, username, pwd },
+        arg: { url, username, pwd, realmName },
       }: Args = ArgsSchema.parse(args?.[1]);
 
       return {
         method: "POST",
-        body: JSON.stringify({ url, username, pwd }),
+        body: JSON.stringify({ url, username, pwd, realmName }),
       };
     })
   );

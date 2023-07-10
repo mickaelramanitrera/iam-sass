@@ -12,6 +12,9 @@ export const addProviderFormSchema = z.object({
   masterPassword: z
     .string()
     .min(4, { message: "master password must be 4 or more characters" }),
+  realmName: z
+    .string()
+    .min(4, { message: "realm name should be 4 or more characters" }),
 });
 
 export type providerFormValuesType = z.infer<typeof addProviderFormSchema>;

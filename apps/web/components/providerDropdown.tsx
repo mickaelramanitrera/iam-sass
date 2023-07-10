@@ -117,6 +117,7 @@ const AddProviderForm: FC<{
       url: "",
       masterUsername: "",
       masterPassword: "",
+      realmName: "",
     },
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -168,6 +169,19 @@ const AddProviderForm: FC<{
                       placeholder="https://prod.keycloak.acme.com/auth"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="realmName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Realm Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

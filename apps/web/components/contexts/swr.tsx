@@ -24,11 +24,18 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
   );
 
   const handle401Error = async () => {
-    const { username, pwd, url, id: currentProviderId } = currentProvider!;
+    const {
+      username,
+      pwd,
+      url,
+      id: currentProviderId,
+      realmName,
+    } = currentProvider!;
     const reconnectResults = await triggerProviderConnect({
       username,
       pwd,
       url,
+      realmName,
     });
 
     let errorMessage = "";
@@ -75,7 +82,6 @@ export const SWRContext: FC<PropsWithChildren<{}>> = ({ children }) => {
           return res.json();
         },
         onError: async (error: FetchError, _) => {
-          console.log("Error occurred with status", error.status);
           toast({
             variant: "destructive",
             title: "An error occurred",

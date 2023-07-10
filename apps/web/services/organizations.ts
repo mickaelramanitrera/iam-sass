@@ -3,7 +3,17 @@
 import useSwr from "swr";
 import { swrFetchHandler } from "@/lib/swr-utils";
 
-export const useOrganizationsCount = (token?: string, serverUrl?: string) => {
+type Args = {
+  token?: string;
+  serverUrl?: string;
+  realmName?: string;
+};
+
+export const useOrganizationsCount = ({
+  token,
+  serverUrl,
+  realmName,
+}: Args) => {
   const { data, error, isLoading, isValidating } = useSwr(
     "/api/organizations/count",
     swrFetchHandler<{ count: 0 }>(() => ({
@@ -11,6 +21,7 @@ export const useOrganizationsCount = (token?: string, serverUrl?: string) => {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(serverUrl ? { ["x-kc-server-url"]: serverUrl } : {}),
+        ...(realmName ? { ["x-kc-server-realm-name"]: realmName } : {}),
       },
     })),
     { refreshInterval: 5000 }

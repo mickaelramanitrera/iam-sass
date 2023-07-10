@@ -7,6 +7,7 @@ const RequestBodySchema = z.object({
   url: z.string().url("Please input a valid url"),
   username: z.string().min(4, "Username MUST be 4 or more characters long"),
   pwd: z.string().min(4, "Password MUST be 4 or more characters long"),
+  realmName: z.string(),
 });
 
 export const POST = routeHandler(async (request: NextRequest) => {
@@ -19,11 +20,11 @@ export const POST = routeHandler(async (request: NextRequest) => {
     );
   }
 
-  const { url: serverUrl, pwd, username } = bodyParseResults.data;
+  const { url: serverUrl, pwd, username, realmName } = bodyParseResults.data;
 
   const keycloakClient = new OIDCClient({
     serverUrl,
-    realmName: "master", // We always use the MASTER realm for now
+    realmName,
   });
 
   const authResponse = await keycloakClient.auth.authenticateWithPassword(

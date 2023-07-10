@@ -8,14 +8,18 @@ import { ProviderContext } from "@/components/contexts/providerContexts";
 
 export const OrganizationsCard = () => {
   const { providers, currentProvider } = useContext(ProviderContext);
-  const { token: currentProviderToken, url: serverUrl } =
-    providers.find((provider) => provider.id === currentProvider) ||
-    providers[0];
+  const {
+    token: currentProviderToken,
+    url: serverUrl,
+    realmName,
+  } = providers.find((provider) => provider.id === currentProvider) ||
+  providers[0];
 
-  const { count, isLoading, isValidating, error } = useOrganizationsCount(
-    currentProviderToken,
-    serverUrl
-  );
+  const { count, isLoading, isValidating, error } = useOrganizationsCount({
+    token: currentProviderToken,
+    serverUrl,
+    realmName,
+  });
 
   const getOrganizationsCountContent = () => {
     if (isLoading) {

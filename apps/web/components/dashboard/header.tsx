@@ -66,11 +66,13 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
     masterPassword: pwd,
     url,
     name,
+    realmName,
   }: providerFormValuesType) => {
     const connectionResults = await trigger({
       username,
       pwd,
       url,
+      realmName,
     });
 
     if (connectionResults?.error) {
@@ -90,6 +92,7 @@ export const Header: FC<Props> = ({ onLogout, logoutPending }) => {
       url,
       username,
       pwd,
+      realmName,
     });
     handleChangeProvider(newProviderId);
 

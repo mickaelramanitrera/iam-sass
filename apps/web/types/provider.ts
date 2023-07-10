@@ -5,4 +5,5 @@ export type Provider = {
   url: string;
   username: string;
   pwd: string;
+  realmName: string;
 };

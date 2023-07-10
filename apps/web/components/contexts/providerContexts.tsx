@@ -30,6 +30,7 @@ const fakeProvider = {
   url: "",
   username: "",
   pwd: "",
+  realmName: "",
 };
 
 export const ProviderProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
