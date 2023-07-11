@@ -1,9 +1,10 @@
 name: prebuild
 run-name: ${{github.job}}-run
 on:
-  pull_request_target:
+  pull_request:
+    types: [opened, synchronize]
     branches:
-      - main
+      - "main"
 jobs:
   prebuild:
     runs-on: macos-12
