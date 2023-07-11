@@ -7,7 +7,9 @@
     "start": "turbo run start",
     "lint": "turbo run lint",
     "shadcn-add": "npx --workspace=web shadcn-ui@latest add",
-    "workspace-add": "turbo gen workspace"
+    "workspace-add": "turbo gen workspace",
+    "test": "turbo run test",
+    "test-watch": "turbo run test:watch"
   },
   "workspaces": [
     "apps/*",
