@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { routeHandler } from "@/app/api/utils";
+import type { KeycloakOrganizationObject } from "keycloak-lib";
 import { getKcHeaders, getKcAdminClient, listOrganizations } from "../helpers";
 
 export const GET = routeHandler(async (_: NextRequest) => {
@@ -7,7 +8,18 @@ export const GET = routeHandler(async (_: NextRequest) => {
 
   // Fake datas if no keycloak provider credentials were sent
   if (!bearerToken || !serverUrl || !realmName) {
-    return NextResponse.json({ count: Math.floor(Math.random() * 30) + 1 });
+    const fakeOrganization: KeycloakOrganizationObject = {
+      id: "xxxxxx",
+      name: "My org",
+      description: "My description",
+      path: "xxxxxxx",
+    };
+    return NextResponse.json({
+      organizations: [
+        { ...fakeOrganization, description: "" },
+        { ...fakeOrganization, name: "My fake org" },
+      ],
+    });
   }
 
   const keycloakAdminClient = getKcAdminClient({
@@ -16,7 +28,7 @@ export const GET = routeHandler(async (_: NextRequest) => {
     serverUrl,
   });
 
-  const organizations = await listOrganizations(keycloakAdminClient);
-
-  return NextResponse.json({ count: organizations.length });
+  return NextResponse.json({
+    organizations: await listOrganizations(keycloakAdminClient),
+  });
 });
