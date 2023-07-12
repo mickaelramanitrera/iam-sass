@@ -26,7 +26,7 @@ const OrganizationsPage = () => {
     // Invalidate cache for orgs list on provider change
     // so that data is refetch right away for the new selected provider
     mutate(async () => ({ organizations: [] }));
-  }, [currentProvider]);
+  }, [currentProvider, mutate]);
 
   return (
     <Container title="Organizations">
@@ -34,8 +34,11 @@ const OrganizationsPage = () => {
         <h4 className="italic">{providerName}</h4>
 
         <div className="my-6 grid gap-4 grid-cols-1">
-          {organizations.map((org) => (
-            <Card className="cursor-pointer hover:-translate-y-1 transition ease-in-out hover:bg-accent">
+          {organizations.map((org, id) => (
+            <Card
+              className="cursor-pointer hover:-translate-y-1 transition ease-in-out hover:bg-accent"
+              key={id}
+            >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle>{org.name}</CardTitle>
                 <Icons.gitHub className="h-4 w-4 text-muted-foreground" />
