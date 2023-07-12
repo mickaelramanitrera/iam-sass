@@ -9,7 +9,7 @@ on:
     branches:
       - "main"
 jobs:
-  ci-job:
+  lint-test-build:
     runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
