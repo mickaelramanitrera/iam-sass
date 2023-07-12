@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useMemo, useEffect } from "react";
 import { CardInfo } from "@/components/dashboard/cardInfo";
 import { useOrganizationsCount } from "@/services/organizations";
 import { Icons } from "@/components/icons";
@@ -15,13 +15,20 @@ export const OrganizationsCard = () => {
   } = providers.find((provider) => provider.id === currentProvider) ||
   providers[0];
 
-  const { count, isLoading, isValidating, error } = useOrganizationsCount({
-    token: currentProviderToken,
-    serverUrl,
-    realmName,
-  });
+  const { count, isLoading, isValidating, error, mutate } =
+    useOrganizationsCount({
+      token: currentProviderToken,
+      serverUrl,
+      realmName,
+    });
 
-  const getOrganizationsCountContent = () => {
+  useEffect(() => {
+    // Invalidate cache for orgs count on provider change
+    // so that data is refetch right away for the new selected provider
+    mutate(async () => ({ count: 0 }));
+  }, [currentProvider, mutate]);
+
+  const content = useMemo(() => {
     if (isLoading) {
       return <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />;
     }
@@ -35,12 +42,12 @@ export const OrganizationsCard = () => {
     }
 
     return count || "0";
-  };
+  }, [isLoading, isValidating, count]);
 
   return (
     <CardInfo
       title="Organizations"
-      content={getOrganizationsCountContent()}
+      content={content}
       icon="building"
       subContent={`+${((count || 0) * 1.78).toFixed(2)}% from last month`}
       link="/dashboard/organizations"
