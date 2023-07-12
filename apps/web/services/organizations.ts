@@ -14,7 +14,7 @@ export const useOrganizationsCount = ({
   serverUrl,
   realmName,
 }: Args) => {
-  const { data, error, isLoading, isValidating } = useSwr(
+  const { data, error, isLoading, isValidating, mutate } = useSwr(
     "/api/organizations/count",
     swrFetchHandler<{ count: number }>(() => ({
       method: "GET",
@@ -24,7 +24,7 @@ export const useOrganizationsCount = ({
         ...(realmName ? { ["x-kc-server-realm-name"]: realmName } : {}),
       },
     })),
-    { refreshInterval: 5000 }
+    { refreshInterval: 5000, revalidateOnMount: true }
   );
 
   return {
@@ -32,5 +32,6 @@ export const useOrganizationsCount = ({
     isLoading,
     error,
     isValidating,
+    mutate,
   };
 };
