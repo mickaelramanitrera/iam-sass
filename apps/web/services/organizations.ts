@@ -59,7 +59,7 @@ export const useOrganizationsList = ({ token, serverUrl, realmName }: Args) => {
         realmName,
         url: "/api/organizations/list",
       },
-      { refreshInterval: 0 }
+      { refreshInterval: 0, revalidateOnMount: false, revalidateOnFocus: false }
     );
 
   return {
