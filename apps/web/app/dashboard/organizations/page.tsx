@@ -36,8 +36,9 @@ const OrganizationsPage = () => {
         <div className="my-6 grid gap-4 grid-cols-1">
           {organizations.map((org, id) => (
             <Card
-              className="cursor-pointer hover:-translate-y-1 transition ease-in-out hover:bg-accent"
               key={id}
+              className="hover:-translate-y-1 transition ease-in-out hover:bg-accent backdrop-blur"
+              role="button"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle>{org.name}</CardTitle>
