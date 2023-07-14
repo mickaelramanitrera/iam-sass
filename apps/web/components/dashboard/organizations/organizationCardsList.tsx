@@ -16,9 +16,9 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const OrganizationCardsList: FC<{
-  organizations: KeycloakOrganizationObject[];
-  loading: boolean;
-}> = ({ organizations, loading }) => {
+  organizations?: KeycloakOrganizationObject[];
+  loading?: boolean;
+}> = ({ organizations = [], loading = false }) => {
   let cardsList: ReactElement[];
   if (loading) {
     cardsList = Object.keys(new Array(6).fill(6)).map((id) => (
@@ -37,7 +37,7 @@ export const OrganizationCardsList: FC<{
   return <div className="my-6 grid gap-4 grid-cols-1">{cardsList}</div>;
 };
 
-const OrganizationSheetButtonCard: FC<{
+export const OrganizationSheetButtonCard: FC<{
   title?: ReactElement | string;
   content?: ReactElement | string;
   loading?: boolean;
@@ -64,6 +64,7 @@ const OrganizationSheetButtonCard: FC<{
         <Card
           className="hover:-translate-y-1 transition ease-in-out hover:bg-accent backdrop-blur"
           role="button"
+          data-testid={"organization-sheet-button-card"}
         >
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle>{title || "(no title)"}</CardTitle>
