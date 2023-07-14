@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useTransition, FC, PropsWithChildren } from "react";
+import { useTransition, FC, PropsWithChildren } from "react";
 import { Header } from "@/components/dashboard/header";
 import { Aside } from "@/components/dashboard/aside";
 import { handleLogout } from "@/app/dashboard/actions";

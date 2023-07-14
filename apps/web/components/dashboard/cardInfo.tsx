@@ -44,7 +44,11 @@ export const CardInfo: FC<cardInfoProps> = ({
       </CardHeader>
       <CardContent>
         {loading && <Skeleton className="w-[31px] h-[28px]" />}
-        {!loading && <div className="text-2xl font-bold">{content}</div>}
+        {!loading && (
+          <div data-testid="CardContentContent" className="text-2xl font-bold">
+            {content}
+          </div>
+        )}
 
         {loading && <Skeleton className="w-[136px] h-[16px] mt-1" />}
         {!loading && (
