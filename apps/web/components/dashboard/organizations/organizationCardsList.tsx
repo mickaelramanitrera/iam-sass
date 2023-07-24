@@ -21,7 +21,8 @@ export const OrganizationCardsList: FC<{
 }> = ({ organizations = [], loading = false }) => {
   let cardsList: ReactElement[];
   if (loading) {
-    cardsList = Object.keys(new Array(6).fill(6)).map((id) => (
+    const orderedNumberedArray = Object.keys(new Array(6).fill(6));
+    cardsList = orderedNumberedArray.map((id) => (
       <OrganizationSheetButtonCard key={id} loading />
     ));
   } else {
